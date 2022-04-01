@@ -196,6 +196,29 @@ via ``DEFAULT_RESULT_TTL`` setting:
 With this setting, job decorator will set ``result_ttl`` to 5000 unless it's
 specified explicitly.
 
+Jobs must be "importable" at a module level, do not encapsulate them in
+objects, i.e. instead of:
+
+.. code-block:: python
+
+    class MyObject:
+
+        @job()
+        def long_running_func():
+            pass
+
+do:
+
+.. code-block:: python
+
+    @job()
+    def long_running_func():
+        pass
+
+    class MyObject:
+
+        def enqueue_long_running_func():
+            long_running_func.delay()
 
 Running workers
 ---------------
